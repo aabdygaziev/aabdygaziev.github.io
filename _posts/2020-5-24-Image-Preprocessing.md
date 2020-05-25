@@ -29,7 +29,8 @@ Let's upload the picture. The astype('float32') converts the image to float, and
 
 
 ```python
-img = plt.imread('jailoo.jpeg').astype('float32')/ 255 # uploading an image
+# uploading an image
+img = plt.imread('jailoo.jpeg').astype('float32')/ 255 
 print(img.shape)
 ```
 
@@ -43,7 +44,7 @@ plt.show()
 ```
 
 
-![jpeg](image_preprocessing_files/image_preprocessing_8_0.png)
+![_config.yml][png](images/image_preprocessing_files/image_preprocessing_8_0.png)
 
 
 ***I took this picutre in 2015, in Naryn, Kyrgyzstan.*** 
