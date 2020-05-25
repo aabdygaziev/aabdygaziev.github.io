@@ -44,7 +44,7 @@ plt.show()
 ```
 
 
-![_config.yml][png](images/image_preprocessing_files/image_preprocessing_8_0.png)
+![png](/images/image_preprocessing_files/image_preprocessing_8_0.png)
 
 
 ***I took this picutre in 2015, in Naryn, Kyrgyzstan.*** 
