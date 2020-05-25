@@ -1,12 +1,11 @@
-# Image Processing with Numpy
-
+---
+layout: post
+title: You're up and running!
+---
 ***
 
-
-                                            “A picture is worth a thousand words”
+  “A picture is worth a thousand words”
                              
-
-
 ***                             
 
 Machine Learning is a big field to be in. Sometimes you might get lost in it which happened to me. I wanted to do everything. I did several projects, and finally I found a joy working with images, so I decided to specialize in application of deep learning in ***Computer Vision***.
