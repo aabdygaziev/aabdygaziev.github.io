@@ -97,7 +97,7 @@ plt.show()
 ```
 
 
-![png](image_preprocessing_files/image_preprocessing_16_0.png)
+![png](images/image_preprocessing_files/image_preprocessing_16_0.png)
 
 
 ***RGB*** stands for **Red, Blue and Green**. Combination of these colors make up the entire spectre of colors. Each color (red, blue, green) takes values from ***0 to 255***. If the value is **0** then it is **black**, if it is **255** then the color is **white**. 
