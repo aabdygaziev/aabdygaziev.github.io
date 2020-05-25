@@ -4,7 +4,7 @@ title: Image Preprocessing with Numpy
 ---
 ***
 
-  “A picture is worth a thousand words”
+“A picture is worth a thousand words"
                              
 ***                             
 
@@ -43,7 +43,7 @@ plt.show()
 ```
 
 
-![png](image_preprocessing_files/image_preprocessing_8_0.png)
+![jpeg](image_preprocessing_files/image_preprocessing_8_0.png)
 
 
 ***I took this picutre in 2015, in Naryn, Kyrgyzstan.*** 
