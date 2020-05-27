@@ -7,13 +7,18 @@ title: Image Processing with Numpy
 “A picture is worth a thousand words"
                              
 ***                             
-<div style="text-align: justify"> Machine Learning is a big field to be in. Sometimes you might get lost in it which happened to me. I wanted to do everything. I did several projects, and finally I found a joy working with images, so I decided to specialize in application of deep learning in Computer Vision. </div>
+Machine Learning is a big field to be in. One of the exciting areas of machine learning is Computer Vision. If you would like to know more about computer vision, AI and machine learning, here it is some useful links:
 
-There are multiples of image processing libraries such as **OpenCV, PILLOW, scikit-image, SciPy-Ndimage** etc. But I am not goin to use those here, instead I will try out simple techniques with Numpy.
+* <a href="https://iclr.cc/virtual_2020/calendar.html#tab-Monday"> ICLR Virtual Conference </a>
+* <a href="https://neptune.ai/blog/iclr-2020-deep-learning"> Blog posts from neptune.ai </a>
+* <a href="https://syncedreview.com/2020/05/04/consistent-video-depth-estimation-generating-hq-depth-maps-from-single-video-input/"> Synced - journal about latest AI and machine learning technology </a>
 
-There are many great resources to learn Computer Vision. Currently, I am reading **"Deep Learning for Computer Vision"** by Adrian Rosebrock.
 
-Link to his page: https://www.pyimagesearch.com/
+Also, there are great books on Computer Vision. Links to some of them that I have been reading now: <a href="https://www.pyimagesearch.com/">Deep Learning for Computer Vision </a> by Adrian Rosebrock, and <a href="http://neuralnetworksanddeeplearning.com/">Neural Network and Deep Learning</a> by Michael Nielsen.
+
+There are number of image processing libraries such as **OpenCV, Pillow, scikit-image, SciPy-Ndimage** etc. But I am not goin to use those here, instead I will try out simple techniques with Numpy. 
+
+***
 
 Let's load **numpy** and **matplotlib** packages.
 
@@ -23,7 +28,6 @@ import numpy as np
 import matplotlib.pylab as plt
 ```
 
-***
 Let's upload the picture. The astype('float32') converts the image to float, and dividing it to 255 makes sure that the pixel value range will be in [0, 1] range rather than [0, 255] range.
 
 

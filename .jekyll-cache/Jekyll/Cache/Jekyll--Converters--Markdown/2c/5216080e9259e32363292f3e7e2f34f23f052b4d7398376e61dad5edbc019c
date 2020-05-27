@@ -1,15 +1,20 @@
-I"};<hr />
+I"�<<hr />
 
 <p>“A picture is worth a thousand words”</p>
 
 <hr />
-<div style="text-align: justify"> Machine Learning is a big field to be in. Sometimes you might get lost in it which happened to me. I wanted to do everything. I did several projects, and finally I found a joy working with images, so I decided to specialize in application of deep learning in Computer Vision. </div>
+<p>Machine Learning is a big field to be in. One of the exciting areas of machine learning is Computer Vision. If you would like to know more about computer vision, AI and machine learning, here it is some useful links:</p>
 
-<p>There are multiples of image processing libraries such as <strong>OpenCV, PILLOW, scikit-image, SciPy-Ndimage</strong> etc. But I am not goin to use those here, instead I will try out simple techniques with Numpy.</p>
+<ul>
+  <li>https://iclr.cc/virtual_2020/calendar.html#tab-Monday</li>
+  <li>https://neptune.ai/blog/iclr-2020-deep-learning</li>
+  <li>https://syncedreview.com/2020/05/04/consistent-video-depth-estimation-generating-hq-depth-maps-from-single-video-input/</li>
+  <li>http://neuralnetworksanddeeplearning.com/</li>
+</ul>
 
-<p>There are many great resources to learn Computer Vision. Currently, I am reading <strong>“Deep Learning for Computer Vision”</strong> by Adrian Rosebrock.</p>
+<p>There are multiples of image processing libraries such as <strong>OpenCV, Pillow, scikit-image, SciPy-Ndimage</strong> etc. But I am not goin to use those here, instead I will try out simple techniques with Numpy.</p>
 
-<p>Link to his page: https://www.pyimagesearch.com/</p>
+<p>There are many great resources to learn Computer Vision. Currently, I am reading <a href="https://www.pyimagesearch.com/">Deep Learning for Computer Vision </a> by Adrian Rosebrock, and <a href="http://neuralnetworksanddeeplearning.com/">Neural Network and Deep Learning</a> by Michael Nielsen.</p>
 
 <p>Let’s load <strong>numpy</strong> and <strong>matplotlib</strong> packages.</p>
 
