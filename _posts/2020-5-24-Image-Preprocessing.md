@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Image Preprocessing with Numpy
+title: Image Processing with Numpy
 ---
 ***
 
