@@ -1,0 +1,106 @@
+I"�-<hr />
+
+<p>Let’s upload libraries…</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># reading the file
+</span><span class="n">filename</span> <span class="o">=</span> <span class="s">'jailoo.jpeg'</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+<span class="n">scale_percent</span> <span class="o">=</span> <span class="mi">30</span> <span class="c1"># percent of original size
+</span><span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">dim</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+<span class="c1"># resize image
+</span><span class="n">resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">INTER_AREA</span><span class="p">)</span>
+ 
+<span class="k">print</span><span class="p">(</span><span class="s">'Resized Dimensions : '</span><span class="p">,</span><span class="n">resized</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Original Dimensions : '</span><span class="p">,</span><span class="n">img</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">resized</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resized Dimensions :  (734, 979, 3)
+Original Dimensions :  (2448, 3264, 3)
+</code></pre></div></div>
+
+<p><img src="/images/corner_detection_files/corner_detection_3_1.png" alt="png" /></p>
+
+<p>Helper function to display our precessed image</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">plti</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="s">"""
+    Helper function to plot an image.
+    """</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">h</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s">"none"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+<span class="n">plti</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/images/corner_detection_files/corner_detection_5_0.png" alt="png" /></p>
+
+<p>The image is resized, and its aspect ratio is kept as original. Now we will try to extract <strong>features</strong> from the picture.</p>
+
+<h2 id="so-what-is-a-feature">So, what is a feature?</h2>
+
+<p>Feature is a piece of an information that is relevant to computational problem related to certain application.</p>
+
+<p>Referece: <a href="https://en.wikipedia.org/wiki/Feature_(computer_vision)">Computer Vision </a></p>
+
+<p>Features of an image are corners, edges, objects and points.</p>
+
+<h2 id="harris-corner-detection">Harris Corner Detection</h2>
+
+<p>This technique is used to find “corners” in images. The idea behind the Harris method is to detect points based on the intensity variation in a local neighborhood: a small region around the feature should show a large intensity change when compared with windows shifted in any direction.</p>
+
+<p>Reference: <a href="http://www.ipol.im/pub/art/2018/229/article_lr.pdf">An Analysis and Implementation of the Harris Corner Detector </a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">resized</span><span class="p">,</span><span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+<span class="n">gray</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">float32</span><span class="p">(</span><span class="n">gray</span><span class="p">)</span>
+<span class="n">dst</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cornerHarris</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.04</span><span class="p">)</span>
+
+<span class="n">dst</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># Threshold for an optimal value, it may vary depending on the image.
+</span><span class="n">resized</span><span class="p">[</span><span class="n">dst</span><span class="o">&gt;</span><span class="mf">0.01</span><span class="o">*</span><span class="n">dst</span><span class="p">.</span><span class="nb">max</span><span class="p">()]</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">]</span>
+
+<span class="n">plti</span><span class="p">(</span><span class="n">resized</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/images/corner_detection_files/corner_detection_9_0.png" alt="png" /></p>
+
+<h3 id="here-we-will-find-10000-best-corners-shi-tomasi-corner-detector">Here we will find 10,000 best corners Shi-Tomasi Corner Detector</h3>
+
+<p>The Harris corner detector has a corner selection criteria. A score is calculated for each pixel, and if the score is above a certain value, the pixel is marked as a corner. The score is calculated using two eigenvalues. That is, you gave the two eigenvalues to a function. The function manipulates them, and gave back a score.</p>
+
+<p><strong>Shi and Tomasi</strong> suggested that the function should be done away with. Only the eigenvalues should be used to check if the pixel was a corner or not.</p>
+
+<p>Reference: &lt;a href =’https://aishack.in/tutorials/shitomasi-corner-detector/&gt;Fundamentals of Features and Corners</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'jailoo.jpeg'</span><span class="p">)</span>
+<span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+
+<span class="n">corners</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">goodFeaturesToTrack</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">corners</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">int0</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="p">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">cv2</span><span class="p">.</span><span class="n">circle</span><span class="p">(</span><span class="n">img</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">),</span><span class="mi">3</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plti</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/images/corner_detection_files/corner_detection_11_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+:ET
