@@ -1,8 +1,10 @@
-I"��<hr />
+I")�<hr />
 
 <p><a href="https://en.wikipedia.org/wiki/Salesforce"> Salesforce.com, inc.</a> is an American cloud-based software company headquartered in San Francisco, California. It provides customer relationship management (CRM) service and also sells a complementary suite of enterprise applications focused on customer service, marketing automation, analytics, and application development (Wikipedia).</p>
 
 <p>The data set is from <a href="https://www.alphavantage.co/#about"> alphavantage </a>. It is very easy to obtain the stock price information from the website. Just follow the documentation.</p>
+
+<p>Before everything esle, we need data. So let’s get it!</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># API Key:LX71H2XX0HSO5PAO 
 </span></code></pre></div></div>
@@ -376,6 +378,8 @@
 </table>
 </div>
 
+<p>Let’s convert data types to float. We can do that using astype method of pandas library.</p>
+
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># converting dtypes to float
 </span><span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 <span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -490,7 +494,7 @@
 </span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_22_0.png" alt="png" /></p>
+<p><img src="/images/salesforce_timeseries_files/salesforce_timeseries_24_0.png" alt="png" /></p>
 
 <p>We can see on the graph when we take average of larger time periods the line gets smoother and smoother. I will predict monthly stock price of the Salesforce Inc.</p>
 
@@ -536,6 +540,8 @@
   <li>Residuals is a noise in the data. It is a remainder when trend and seasonality are removed.</li>
 </ul>
 
+<p>Decomposition is primarily used for time series analysis, and as an analysis tool it can be used to inform forecasting models on your problem. It helps to break down your problem and think in structured way.</p>
+
 <p><a href="https://en.wikipedia.org/wiki/Decomposition_of_time_series"> Learn more </a></p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DF_test</span><span class="p">(</span><span class="n">df_monthly</span><span class="p">)</span>
@@ -548,7 +554,7 @@
 &lt;Figure size 720x360 with 0 Axes&gt;
 </code></pre></div></div>
 
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_31_2.png" alt="png" /></p>
+<p><img src="/images/salesforce_timeseries_files/salesforce_timeseries_33_2.png" alt="png" /></p>
 
 <p>Dickey-Fuller test indicates that the data is not stationary as we can see on the graph. P-value is 1.0. We failed to reject null-hypothesis that our data is stationary. P-value should less than or equal to 0.05.</p>
 
@@ -608,289 +614,10 @@ NameError: name 'log_transformation' is not defined
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dickey–Fuller test: p=0.003912
 </code></pre></div></div>
 
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_39_1.png" alt="png" /></p>
+<p><img src="/images/salesforce_timeseries_files/salesforce_timeseries_41_1.png" alt="png" /></p>
 
-<ul>
-  <li>Monthly data is stationarized</li>
-</ul>
+<p>Now our data is stationarized, so we can move to predicting. You can check <a href="https://medium.com/@aabdygaziev/salesforce-inc-stock-price-prediction-time-series-analysis-299bc3f1b631"> Salesforce stock price prediction’ </a> on my Medium blog post.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># model selection
-# Initial approximation of parameters using Autocorrelation and Partial Autocorrelation Plots
-</span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-<span class="n">sm</span><span class="p">.</span><span class="n">graphics</span><span class="p">.</span><span class="n">tsa</span><span class="p">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">df_monthly</span><span class="p">.</span><span class="n">prices_box_diff</span><span class="p">[</span><span class="mi">12</span><span class="p">:].</span><span class="n">values</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">lags</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-<span class="n">sm</span><span class="p">.</span><span class="n">graphics</span><span class="p">.</span><span class="n">tsa</span><span class="p">.</span><span class="n">plot_pacf</span><span class="p">(</span><span class="n">df_monthly</span><span class="p">.</span><span class="n">prices_box_diff</span><span class="p">[</span><span class="mi">12</span><span class="p">:].</span><span class="n">values</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">lags</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 </code></pre></div></div>
-
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_41_0.png" alt="png" /></p>
-
-<ul>
-  <li>Initial parameters according to the graph above:
-    <ul>
-      <li>P (0-2)</li>
-      <li>D (0)</li>
-      <li>Q (0-5)</li>
-      <li>seasonality (12)</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># fitting to the model
-# MA, AR values
-</span><span class="n">p</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">q</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="c1"># seasonal order
-</span><span class="n">P</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">D</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">Q</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-
-
-<span class="n">parameters</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
-<span class="n">parameters_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
-
-<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">best_aic</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"inf"</span><span class="p">)</span>
-<span class="n">warnings</span><span class="p">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s">'ignore'</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">parameters_list</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">sm</span><span class="p">.</span><span class="n">tsa</span><span class="p">.</span><span class="n">statespace</span><span class="p">.</span><span class="n">SARIMAX</span><span class="p">(</span><span class="n">df_monthly</span><span class="p">.</span><span class="n">Price_box</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">d</span><span class="p">,</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
-                                        <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span><span class="n">param</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">12</span><span class="p">)).</span><span class="n">fit</span><span class="p">(</span><span class="n">disp</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">'wrong parameters:'</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
-        <span class="k">continue</span>
-    <span class="n">aic</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">aic</span>
-    <span class="k">if</span> <span class="n">aic</span> <span class="o">&lt;</span> <span class="n">best_aic</span><span class="p">:</span>
-        <span class="n">best_model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="n">best_aic</span> <span class="o">=</span> <span class="n">aic</span>
-        <span class="n">best_param</span> <span class="o">=</span> <span class="n">param</span>
-        <span class="n">results</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="n">param</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">aic</span><span class="p">])</span>    
-
-        
-
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Best Models
-</span><span class="n">result_table</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-<span class="n">result_table</span><span class="p">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'parameters'</span><span class="p">,</span> <span class="s">'aic'</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result_table</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span> <span class="o">=</span> <span class="s">'aic'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">head</span><span class="p">())</span>
-<span class="k">print</span><span class="p">(</span><span class="n">best_model</span><span class="p">.</span><span class="n">summary</span><span class="p">())</span>
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     parameters         aic
-2  (1, 0, 0, 1) -172.505623
-1  (0, 0, 0, 1) -162.739139
-0  (0, 0, 0, 0)  -62.580627
-                                 Statespace Model Results                                 
-==========================================================================================
-Dep. Variable:                          Price_box   No. Observations:                  189
-Model:             SARIMAX(1, 1, 1)x(0, 1, 1, 12)   Log Likelihood                  90.253
-Date:                            Sun, 23 Feb 2020   AIC                           -172.506
-Time:                                    20:45:55   BIC                           -159.824
-Sample:                                06-30-2004   HQIC                          -167.362
-                                     - 02-29-2020                                         
-Covariance Type:                              opg                                         
-==============================================================================
-                 coef    std err          z      P&gt;|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-ar.L1         -0.0548      0.261     -0.210      0.834      -0.566       0.456
-ma.L1          0.3371      0.264      1.277      0.202      -0.180       0.854
-ma.S.L12      -0.9899      1.316     -0.752      0.452      -3.569       1.589
-sigma2         0.0175      0.023      0.778      0.437      -0.027       0.062
-===================================================================================
-Ljung-Box (Q):                       32.69   Jarque-Bera (JB):                62.34
-Prob(Q):                              0.79   Prob(JB):                         0.00
-Heteroskedasticity (H):               0.40   Skew:                            -0.76
-Prob(H) (two-sided):                  0.00   Kurtosis:                         5.49
-===================================================================================
-
-Warnings:
-[1] Covariance matrix calculated using the outer product of gradients (complex-step).
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># STL-decomposition
-</span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-<span class="n">best_model</span><span class="p">.</span><span class="n">resid</span><span class="p">[</span><span class="mi">12</span><span class="p">:].</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">u'Residuals'</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-<span class="n">sm</span><span class="p">.</span><span class="n">graphics</span><span class="p">.</span><span class="n">tsa</span><span class="p">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">best_model</span><span class="p">.</span><span class="n">resid</span><span class="p">[</span><span class="mi">13</span><span class="p">:].</span><span class="n">values</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">lags</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-
-<span class="k">print</span><span class="p">(</span><span class="s">"Dickey–Fuller test:: p=%f"</span> <span class="o">%</span> <span class="n">sm</span><span class="p">.</span><span class="n">tsa</span><span class="p">.</span><span class="n">stattools</span><span class="p">.</span><span class="n">adfuller</span><span class="p">(</span><span class="n">best_model</span><span class="p">.</span><span class="n">resid</span><span class="p">[</span><span class="mi">13</span><span class="p">:])[</span><span class="mi">1</span><span class="p">])</span>
-
-<span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dickey–Fuller test:: p=0.000000
-</code></pre></div></div>
-
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_45_1.png" alt="png" /></p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">df_monthly</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>189
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Inverse Box-Cox Transformation Function
-</span><span class="k">def</span> <span class="nf">invboxcox</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">lmbda</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">lmbda</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">lmbda</span><span class="o">*</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">lmbda</span><span class="p">))</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Prediction
-</span>
-<span class="n">df_month2</span> <span class="o">=</span> <span class="n">df_monthly</span><span class="p">[[</span><span class="s">'Price'</span><span class="p">]]</span>
-
-<span class="n">date_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> 
-             <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> 
-             <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> 
-             <span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
-
-<span class="n">future</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">date_list</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span> <span class="n">df_monthly</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
-<span class="n">df_month2</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_month2</span><span class="p">,</span> <span class="n">future</span><span class="p">])</span>
-<span class="n">df_month2</span><span class="p">[</span><span class="s">'forecast'</span><span class="p">]</span> <span class="o">=</span> <span class="n">invboxcox</span><span class="p">((</span><span class="n">best_model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">200</span><span class="p">)),</span><span class="n">lmbda</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">df_month2</span><span class="p">.</span><span class="n">Price</span><span class="p">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">df_month2</span><span class="p">.</span><span class="n">forecast</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">'r'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">'--'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'Predicted Price'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'CRM share price, by months'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'mean USD'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div></div>
-
-<p><img src="salesforce_timeseries_files/salesforce_timeseries_48_0.png" alt="png" /></p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df_month2</span><span class="p">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>6. volume</th>
-      <th>Price</th>
-      <th>Price_box</th>
-      <th>price_log</th>
-      <th>prices_box_diff</th>
-      <th>forecast</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>2020-02-29</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>188.345304</td>
-    </tr>
-    <tr>
-      <td>2020-03-30</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <td>2020-04-30</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>198.720247</td>
-    </tr>
-    <tr>
-      <td>2020-05-31</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>202.109957</td>
-    </tr>
-    <tr>
-      <td>2020-06-30</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>202.907078</td>
-    </tr>
-    <tr>
-      <td>2020-07-31</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>203.433275</td>
-    </tr>
-    <tr>
-      <td>2020-08-31</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>204.383844</td>
-    </tr>
-    <tr>
-      <td>2020-09-30</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>212.845838</td>
-    </tr>
-    <tr>
-      <td>2020-10-31</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>213.022514</td>
-    </tr>
-    <tr>
-      <td>2020-11-30</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>217.625027</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 :ET
