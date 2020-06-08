@@ -631,7 +631,7 @@ DF_test(df_monthly)
 
 
 
-![png](/images/salesforce_timeseries_files/salesforce_timeseries_33_2.png)
+![png](/images/salesforce_timeseries_files/salesforce_timeseries_31_2.png)
 
 
 Dickey-Fuller test indicates that the data is not stationary as we can see on the graph. P-value is 1.0. We failed to reject null-hypothesis that our data is stationary. P-value should less than or equal to 0.05.
@@ -706,7 +706,7 @@ plt.show()
 
 
 
-![png](/images/salesforce_timeseries_files/salesforce_timeseries_41_1.png)
+![png](/images/salesforce_timeseries_files/salesforce_timeseries_41_0.png)
 
 
 Now our data is stationarized, so we can move to predicting. You can check <a href='https://medium.com/@aabdygaziev/salesforce-inc-stock-price-prediction-time-series-analysis-299bc3f1b631'> Salesforce stock price prediction' </a> on my Medium blog post.
