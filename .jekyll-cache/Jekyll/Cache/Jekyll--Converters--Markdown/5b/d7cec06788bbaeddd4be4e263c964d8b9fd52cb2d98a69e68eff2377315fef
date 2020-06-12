@@ -1,4 +1,4 @@
-I")ç<hr />
+I"íç<hr />
 
 <p><a href="https://en.wikipedia.org/wiki/Salesforce"> Salesforce.com, inc.</a> is an American cloud-based software company headquartered in San Francisco, California. It provides customer relationship management (CRM) service and also sells a complementary suite of enterprise applications focused on customer service, marketing automation, analytics, and application development (Wikipedia).</p>
 
@@ -320,7 +320,11 @@
 <p>Now that we have proper format, we should drop irrelevant columns. For simplicity, I will keep ajusted close, and volume columns.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># removing unused features
-</span><span class="n">df_transposed</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'1. open'</span><span class="p">,</span><span class="s">'2. high'</span><span class="p">,</span> <span class="s">'3. low'</span><span class="p">,</span> <span class="s">'4. close'</span><span class="p">,</span><span class="s">'7. dividend amount'</span><span class="p">,</span><span class="s">'8. split coefficient'</span><span class="p">],</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="n">df_transposed</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span>
+                   <span class="p">[</span><span class="s">'1. open'</span><span class="p">,</span><span class="s">'2. high'</span><span class="p">,</span> <span class="s">'3. low'</span><span class="p">,</span> 
+                    <span class="s">'4. close'</span><span class="p">,</span><span class="s">'7. dividend amount'</span><span class="p">,</span>
+                    <span class="s">'8. split coefficient'</span><span class="p">],</span>
+                   <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df_transposed</span><span class="p">.</span><span class="n">head</span><span class="p">()</span> 
@@ -381,8 +385,11 @@
 <p>Let‚Äôs convert data types to float. We can do that using astype method of pandas library.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># converting dtypes to float
-</span><span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</span><span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">]</span> <span class="o">=</span> 
+        <span class="n">df_transposed</span><span class="p">[</span><span class="s">'5. adjusted close'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    
+<span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">]</span> 
+        <span class="o">=</span> <span class="n">df_transposed</span><span class="p">[</span><span class="s">'6. volume'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df_transposed</span><span class="p">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># sorting in ascending format
@@ -494,7 +501,7 @@
 </span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p><img src="/images/salesforce_timeseries_files/salesforce_timeseries_24_0.png" alt="png" /></p>
+<p><img src="/images/salesforce_timeseries_files/salesforce_timeseries_22_0.png" alt="png" /></p>
 
 <p>We can see on the graph when we take average of larger time periods the line gets smoother and smoother. I will predict monthly stock price of the Salesforce Inc.</p>
 

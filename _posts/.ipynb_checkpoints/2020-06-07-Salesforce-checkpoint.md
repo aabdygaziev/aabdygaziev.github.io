@@ -356,7 +356,11 @@ Now that we have proper format, we should drop irrelevant columns. For simplicit
 
 ```python
 # removing unused features
-df_transposed.drop(columns=['1. open','2. high', '3. low', '4. close','7. dividend amount','8. split coefficient'],inplace=True)
+df_transposed.drop(columns=
+                   ['1. open','2. high', '3. low', 
+                    '4. close','7. dividend amount',
+                    '8. split coefficient'],
+                   inplace=True)
 ```
 
 
@@ -426,18 +430,23 @@ Let's convert data types to float. We can do that using astype method of pandas 
 
 ```python
 # converting dtypes to float
-df_transposed['5. adjusted close'] = df_transposed['5. adjusted close'].astype(float)
-df_transposed['6. volume'] = df_transposed['6. volume'].astype(float)
+df_transposed['5. adjusted close'] = 
+        df_transposed['5. adjusted close'].astype(float)
+    
+df_transposed['6. volume'] 
+        = df_transposed['6. volume'].astype(float)
 ```
 
 
 ```python
-df_transposed.sort_index(ascending=True,inplace=True) # sorting in ascending format
+# sorting in ascending format
+df_transposed.sort_index(ascending=True,inplace=True) 
 ```
 
 
 ```python
-df_transposed.index = pd.to_datetime(df_transposed.index) # converting indices to datetime
+# converting indices to datetime
+df_transposed.index = pd.to_datetime(df_transposed.index) 
 ```
 
 
@@ -561,7 +570,7 @@ plt.show()
 ```
 
 
-![png](/images/salesforce_timeseries_files/salesforce_timeseries_24_0.png)
+![png](/images/salesforce_timeseries_files/salesforce_timeseries_22_0.png)
 
 
 We can see on the graph when we take average of larger time periods the line gets smoother and smoother. I will predict monthly stock price of the Salesforce Inc. 
@@ -596,7 +605,8 @@ Little function below plots seasonal decomposition of a time-series data, and re
 def DF_test(df):
     plt.figure(figsize=[10,5])
     sm.tsa.seasonal_decompose(df.Price).plot()
-    print("Dickey–Fuller test: p=%f" % sm.tsa.stattools.adfuller(df.Price)[1])
+    print("Dickey–Fuller test: p=%f" 
+          % sm.tsa.stattools.adfuller(df.Price)[1])
     plt.show()
 ```
 
@@ -643,13 +653,15 @@ To achieve stationary state we can do various data tranformations. For example, 
 # Box-Cox Transformations
 def box_cox(df):
     df['Price_box'], lmbda = stats.boxcox(df['Price'])
-    print("Dickey–Fuller test: p=%f" % sm.tsa.stattools.adfuller(df['Price_box'])[1])
+    print("Dickey–Fuller test: p=%f" % 
+          sm.tsa.stattools.adfuller(df['Price_box'])[1])
 ```
 
 
 ```python
 df_monthly['Price_box'], lmbda = stats.boxcox(df_monthly['Price'])
-print("Dickey–Fuller test: p=%f" % sm.tsa.stattools.adfuller(df_monthly['Price_box'])[1])
+print("Dickey–Fuller test: p=%f" % 
+      sm.tsa.stattools.adfuller(df_monthly['Price_box'])[1])
 ```
 
     Dickey–Fuller test: p=0.871254
@@ -662,7 +674,8 @@ After Box-Cox transformation our data is still non-stationary. Let's apply log t
 # log tranformation
 def log_transformation(df):
     df['price_log']=df['Price'].apply(lambda x: np.log(x))
-    print("Dickey–Fuller test: p=%f" % sm.tsa.stattools.adfuller(df['price_log'])[1])
+    print("Dickey–Fuller test: p=%f" % 
+          sm.tsa.stattools.adfuller(df['price_log'])[1])
 ```
 
 
@@ -687,8 +700,10 @@ log_transformation(df_monthly)
 
 ```python
 # Seasonal differentiation
-df_monthly['prices_box_diff'] = df_monthly.Price_box - df_monthly.Price_box.shift(12)
-print("Dickey–Fuller test: p=%f" % sm.tsa.stattools.adfuller(df_monthly.prices_box_diff[12:])[1])
+df_monthly['prices_box_diff'] = 
+        df_monthly.Price_box - df_monthly.Price_box.shift(12)
+print("Dickey–Fuller test: p=%f" % 
+        sm.tsa.stattools.adfuller(df_monthly.prices_box_diff[12:])[1])
 ```
 
     Dickey–Fuller test: p=0.003912

@@ -557,7 +557,7 @@ plt.show()
 ```
 
 
-![png](/images/salesforce_timeseries_files/salesforce_timeseries_22_0.png)
+![png](/images/salesforce_timeseries_files/salesforce_timeseries_24_0.png)
 
 
 We can see on the graph when we take average of larger time periods the line gets smoother and smoother. I will predict monthly stock price of the Salesforce Inc. 
