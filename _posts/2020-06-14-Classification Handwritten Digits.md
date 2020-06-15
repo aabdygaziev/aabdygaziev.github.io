@@ -36,12 +36,12 @@ Uploading the data set. You can download it from here: http://pjreddie.com/proje
 
 ```python
 # let's upload train data
-train_data_file = open('/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_train.csv','r')
+train_data_file = open('mnist/mnist_train.csv','r')
 train_data_list = train_data_file.readlines()
 train_data_file.close()
 
 # # let's upload test data
-test_data_file = open('/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_test.csv','r')
+test_data_file = open('mnist/mnist_test.csv','r')
 test_data_list = test_data_file.readlines()
 test_data_file.close()
 
