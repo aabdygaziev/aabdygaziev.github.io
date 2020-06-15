@@ -1,0 +1,290 @@
+I"j�<hr />
+
+<h1 id="neural-network-from-scratch-on-mnist-data-set">Neural Network from scratch on MNIST data set</h1>
+
+<p>MNIST data set is one of the popular data resources to learn deep learning. It contains handwritten digits from 0-9. It is ideal task for a computer to recognize numbers written by humans. For a human, it is very easy to tell what it is on the picture or video. But for a computer it’s very hard and it requires a lot computing. Because for a computer image is just an array of pixels, numerical values that represent color shades Red, Green, and Blue.</p>
+
+<p>In this post, I would like to show how we can build simple neural network with numpy. I am new to computer vision and deep learning and this is what I’ve learned so far.</p>
+
+<p>“While we teach, we learn”</p>
+
+<p>Let’s start. Upload neccessary library…</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
+
+<span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Uploading the data set. You can download it from here: http://pjreddie.com/projects/mnist-in-csv/</p>
+
+<h2 id="preparing-the-data">Preparing the Data</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># let's upload train data
+</span><span class="n">train_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_train.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
+<span class="n">train_data_list</span> <span class="o">=</span> <span class="n">train_data_file</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="n">train_data_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># # let's upload test data
+</span><span class="n">test_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_test.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
+<span class="n">test_data_list</span> <span class="o">=</span> <span class="n">test_data_file</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="n">test_data_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>Let’s chech how many records in our train &amp; test data-sets.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">'Number of training examples: '</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">train_data_list</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Number of test examples: '</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data_list</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Number of training examples:  60000
+Number of test examples:  10000
+</code></pre></div></div>
+
+<p>We stored our data in train_data_list. It is a list that contains all the data. The first element of the record is a <strong>label</strong>. For example, first element of the first record in our train data-set is number 5, and the rest is pixel values of number 5. If you look closely, you’ll find that all values are within 0 - 255 range.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">train_data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,18,18,18,126,136,175,26,166,255,247,127,0,0,0,0,0,0,0,0,0,0,0,0,30,36,94,154,170,253,253,253,253,253,225,172,253,242,195,64,0,0,0,0,0,0,0,0,0,0,0,49,238,253,253,253,253,253,253,253,253,251,93,82,82,56,39,0,0,0,0,0,0,0,0,0,0,0,0,18,219,253,253,253,253,253,198,182,247,241,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,80,156,107,253,253,205,11,0,43,154,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,1,154,253,90,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,139,253,190,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,190,253,70,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35,241,225,160,108,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81,240,253,253,119,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,186,253,253,150,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,93,252,253,187,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,249,253,249,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,130,183,253,253,207,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39,148,229,253,253,253,250,182,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,114,221,253,253,253,253,201,78,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,66,213,253,253,253,253,198,81,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,171,219,253,253,253,253,195,80,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55,172,226,253,253,253,253,244,133,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,136,253,253,253,212,135,132,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n'
+</code></pre></div></div>
+
+<p>Let’s plot arrays using matplotlib. First we need to convert data set from string to a float type.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">five</span> <span class="o">=</span> <span class="n">train_data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">five</span><span class="p">[</span><span class="mi">1</span><span class="p">:]).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="/images/blog_files/blog_13_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">zero</span> <span class="o">=</span> <span class="n">train_data_list</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">zero</span><span class="p">[</span><span class="mi">1</span><span class="p">:]).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="/images/blog_files/blog_14_0.png" alt="png" /></p>
+
+<p>Right now we can start buidling our neural network. We’ll build class object called Network.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># defining a network class
+</span>
+<span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
+    
+    <span class="c1">#initialize neural nets
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inodes</span><span class="p">,</span><span class="n">hnodes</span><span class="p">,</span><span class="n">onodes</span><span class="p">,</span><span class="n">lrate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">inodes</span> <span class="o">=</span> <span class="n">inodes</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">hnodes</span> <span class="o">=</span> <span class="n">hnodes</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">onodes</span> <span class="o">=</span> <span class="n">onodes</span>
+        
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">wih</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">inodes</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),(</span><span class="bp">self</span><span class="p">.</span><span class="n">hnodes</span><span class="p">,</span><span class="bp">self</span><span class="p">.</span><span class="n">inodes</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">who</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">onodes</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),(</span><span class="bp">self</span><span class="p">.</span><span class="n">onodes</span><span class="p">,</span><span class="bp">self</span><span class="p">.</span><span class="n">hnodes</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">lrate</span> <span class="o">=</span> <span class="n">lrate</span>
+        
+        <span class="bp">self</span><span class="p">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">scipy</span><span class="p">.</span><span class="n">special</span><span class="p">.</span><span class="n">expit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+        <span class="k">pass</span>        
+        
+       
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">input_list</span><span class="p">,</span><span class="n">target_list</span><span class="p">):</span>
+        
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_list</span><span class="p">,</span><span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">).</span><span class="n">T</span>
+        
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_list</span><span class="p">,</span><span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">).</span><span class="n">T</span>
+    
+    
+        <span class="c1"># calculate signals into hidden layer
+</span>        <span class="n">hidden_inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">wih</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        
+        <span class="c1"># calculate the signals emerging from hidden layer
+</span>        <span class="n">hidden_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">activation</span><span class="p">(</span><span class="n">hidden_inputs</span><span class="p">)</span>
+        
+        <span class="c1"># calculate signals into final output layer
+</span>        <span class="n">final_inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">who</span><span class="p">,</span> <span class="n">hidden_outputs</span><span class="p">)</span>
+        
+        <span class="c1"># calculate the signals emerging from final output layer
+</span>        <span class="n">final_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">activation</span><span class="p">(</span><span class="n">final_inputs</span><span class="p">)</span>
+        
+        <span class="c1"># output layer error is the (target - actual)
+</span>        <span class="n">output_errors</span> <span class="o">=</span> <span class="n">targets</span> <span class="o">-</span> <span class="n">final_outputs</span>
+        
+        <span class="c1"># hidden layer error is the output_errors, split by weights, recombined at hidden nodes
+</span>        <span class="n">hidden_errors</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">who</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">output_errors</span><span class="p">)</span> 
+        
+        <span class="c1">#update weights between hidden &amp; output layers
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">who</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">lrate</span> <span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">((</span><span class="n">output_errors</span><span class="o">*</span><span class="n">final_outputs</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">final_outputs</span><span class="p">)),</span>
+                                       <span class="n">np</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">hidden_outputs</span><span class="p">))</span>
+        
+        
+        <span class="c1">#update weigths between input &amp; hidden layers
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">wih</span> <span class="o">+=</span>  <span class="bp">self</span><span class="p">.</span><span class="n">lrate</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">((</span><span class="n">hidden_errors</span><span class="o">*</span><span class="n">hidden_outputs</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">hidden_outputs</span><span class="p">)),</span>
+                                         <span class="n">np</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+        
+    
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs_list</span><span class="p">):</span>
+        <span class="c1"># convert inputs list to 2d array
+</span>        <span class="n">inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="p">).</span><span class="n">T</span>
+        
+        <span class="c1"># calculate signals into hidden layer
+</span>        <span class="n">hidden_inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">wih</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="c1"># calculate the signals emerging from hidden layer
+</span>        <span class="n">hidden_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">activation</span><span class="p">(</span><span class="n">hidden_inputs</span><span class="p">)</span>
+        
+        <span class="c1"># calculate signals into final output layer
+</span>        <span class="n">final_inputs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">who</span><span class="p">,</span> <span class="n">hidden_outputs</span><span class="p">)</span>
+        <span class="c1"># calculate the signals emerging from final output layer
+</span>        <span class="n">final_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">activation</span><span class="p">(</span><span class="n">final_inputs</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">final_outputs</span>
+</code></pre></div></div>
+
+<h2 id="train-the-nueral-network-with-train-data">Train the nueral network with train data</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">input_nodes</span> <span class="o">=</span> <span class="mi">784</span>
+<span class="n">hidden_nodes</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">output_nodes</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># learning rate
+</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1"># create instance of neural network
+</span><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">input_nodes</span><span class="p">,</span><span class="n">hidden_nodes</span><span class="p">,</span><span class="n">output_nodes</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># epochs is the number of times the training data set is used for training
+</span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="c1"># go through all records in the training data set
+</span>    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">train_data_list</span><span class="p">:</span>
+        <span class="c1"># split the record by the ',' commas
+</span>        <span class="n">all_values</span> <span class="o">=</span> <span class="n">record</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+        <span class="c1"># scale and shift the inputs
+</span>        <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+        <span class="c1"># create the target output values (all 0.01, except the desired label which is 0.99)
+</span>        <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">output_nodes</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+        <span class="c1"># all_values[0] is the target label for this record
+</span>        <span class="n">targets</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="mf">0.99</span>
+        <span class="n">net</span><span class="p">.</span><span class="n">train</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+        <span class="k">pass</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<h2 id="prediction-and-accuracy">Prediction and accuracy</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">score_card</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">test_data_list</span><span class="p">:</span>
+    <span class="n">all_values</span> <span class="o">=</span> <span class="n">record</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+    
+    <span class="c1">#correct labesl
+</span>    <span class="n">correct_label</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    
+    <span class="c1">#normalize inputs
+</span>    <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+    
+    <span class="c1">#prediction
+</span>    <span class="n">outputs</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    
+    <span class="c1">#index of max value corresponds to the label
+</span>    <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+    
+    <span class="c1">#append to list if correct/incorrect:
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">label</span><span class="o">==</span><span class="n">correct_label</span><span class="p">):</span>
+        <span class="n">score_card</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">score_card</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">pass</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>Let’s calculate the accuracy of our model.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># calculate the performance
+</span>
+<span class="n">score_card_array</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">score_card</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">score_card_array</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">score_card_array</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.9742
+</code></pre></div></div>
+
+<p>97% accuracy is very good for this kind of simple model with just 5 epochs. Every time when we increase epochs neural network starts memorizing the data-set and it will eventually overfit.</p>
+
+<p>Now, let’s try with epcohs = 10.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># epochs is the number of times the training data set is used for training
+</span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="c1"># go through all records in the training data set
+</span>    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">train_data_list</span><span class="p">:</span>
+        <span class="c1"># split the record by the ',' commas
+</span>        <span class="n">all_values</span> <span class="o">=</span> <span class="n">record</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+        <span class="c1"># scale and shift the inputs
+</span>        <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+        <span class="c1"># create the target output values (all 0.01, except the desired label which is 0.99)
+</span>        <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">output_nodes</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+        <span class="c1"># all_values[0] is the target label for this record
+</span>        <span class="n">targets</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="mf">0.99</span>
+        <span class="n">net</span><span class="p">.</span><span class="n">train</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+        <span class="k">pass</span>
+    <span class="k">pass</span>
+
+
+<span class="n">score_card</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">test_data_list</span><span class="p">:</span>
+    <span class="n">all_values</span> <span class="o">=</span> <span class="n">record</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+    
+    <span class="c1">#correct labesl
+</span>    <span class="n">correct_label</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    
+    <span class="c1">#normalize inputs
+</span>    <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">asfarray</span><span class="p">(</span><span class="n">all_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+    
+    <span class="c1">#prediction
+</span>    <span class="n">outputs</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    
+    <span class="c1">#index of max value corresponds to the label
+</span>    <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+    
+    <span class="c1">#append to list if correct/incorrect:
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">label</span><span class="o">==</span><span class="n">correct_label</span><span class="p">):</span>
+        <span class="n">score_card</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">score_card</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">pass</span>
+    <span class="k">pass</span>
+
+<span class="c1"># calculate the performance
+</span>
+<span class="n">score_card_array</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">score_card</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">score_card_array</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">score_card_array</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.9759
+</code></pre></div></div>
+
+<p>After 10 iterations, accuracy barely improved.</p>
+
+<p>There are many greate resources to learn about deep learning. Here the list of some of them:</p>
+<ul>
+  <li><a href="http://makeyourownneuralnetwork.blogspot.com"> Make your own neural network </a></li>
+  <li><a href="http://neuralnetworksanddeeplearning.com/"> Nerual networks and deep learning by Michael Nielsen</a></li>
+  <li><a href="https://iamtrask.github.io/"> blog posts from Andrew Trask </a></li>
+</ul>
+
+:ET
