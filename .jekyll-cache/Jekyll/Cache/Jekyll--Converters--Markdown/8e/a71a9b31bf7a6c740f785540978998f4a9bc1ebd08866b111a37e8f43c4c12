@@ -1,4 +1,4 @@
-I"j‚<hr />
+I"ò<hr />
 
 <h1 id="neural-network-from-scratch-on-mnist-data-set">Neural Network from scratch on MNIST data set</h1>
 
@@ -28,12 +28,12 @@
 <h2 id="preparing-the-data">Preparing the Data</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># let's upload train data
-</span><span class="n">train_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_train.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
+</span><span class="n">train_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'mnist/mnist_train.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
 <span class="n">train_data_list</span> <span class="o">=</span> <span class="n">train_data_file</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span>
 <span class="n">train_data_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="c1"># # let's upload test data
-</span><span class="n">test_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/Users/abdygaziev/Documents/FlatironMaterials/Projects/data/mnist/mnist_test.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
+</span><span class="n">test_data_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'mnist/mnist_test.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span>
 <span class="n">test_data_list</span> <span class="o">=</span> <span class="n">test_data_file</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span>
 <span class="n">test_data_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
 
