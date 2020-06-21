@@ -13,7 +13,7 @@ Keras is simple and powerfull deep learning library for Python. You can learn mo
 
 ![png](/images/Keras_image/iu-2.png)
 
-Let' start!
+Let's start!
 
 
 ```python
