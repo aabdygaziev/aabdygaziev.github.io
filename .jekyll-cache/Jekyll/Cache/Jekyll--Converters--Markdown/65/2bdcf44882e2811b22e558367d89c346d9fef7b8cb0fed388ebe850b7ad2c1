@@ -1,4 +1,4 @@
-I"�l<hr />
+I"�l<hr />
 
 <p>The problem: MNIST handwritten digit classification
 MNIST data-set is classic deep learning problem. It’s a collection of handwritten digits from 0 to 9.</p>
@@ -9,7 +9,7 @@ MNIST data-set is classic deep learning problem. It’s a collection of handwrit
 
 <p><img src="/images/Keras_image/iu-2.png" alt="png" /></p>
 
-<p>Let’ start!</p>
+<p>Let’s start!</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">import</span> <span class="nn">keras</span>
