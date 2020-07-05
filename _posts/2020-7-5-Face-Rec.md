@@ -5,7 +5,7 @@ title: Face Recognition Algorithm with OpenCV
 ***
 
 
-Today we will try to build face recognition algorithm that tells you who is in fron of the camera. To do that, we need sample of training data. For the simplicity, I used my own pictures, and dowloanded from internet pictures of GOT stars - Kit Harrington, and Lena Headey.
+Today we will try to build face recognition algorithm that tells you who is in front of the camera. To do that, we need sample of training data. For the simplicity, I used my own pictures, and dowloanded from internet pictures of GOT stars - Kit Harrington, and Lena Headey.
 
 This project is inspired from <a href='https://www.codingforentrepreneurs.com/'> codingforentrepreneurs youtube channel</a>.
 
