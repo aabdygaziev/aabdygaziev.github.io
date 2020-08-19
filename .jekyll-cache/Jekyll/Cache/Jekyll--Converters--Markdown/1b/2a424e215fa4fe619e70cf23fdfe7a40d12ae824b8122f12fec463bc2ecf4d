@@ -1,6 +1,6 @@
-I"	Y<hr />
+I"Y<hr />
 
-<p>Today we will try to build face recognition algorithm that tells you who is in fron of the camera. To do that, we need sample of training data. For the simplicity, I used my own pictures, and dowloanded from internet pictures of GOT stars - Kit Harrington, and Lena Headey.</p>
+<p>Today we will try to build face recognition algorithm that tells you who is in front of the camera. To do that, we need sample of training data. For the simplicity, I used my own pictures, and downloaded from internet pictures of GOT stars - Kit Harrington, and Lena Headey.</p>
 
 <p>This project is inspired from <a href="https://www.codingforentrepreneurs.com/"> codingforentrepreneurs youtube channel</a>.</p>
 
@@ -175,12 +175,12 @@
 
 <h2 id="results">Results</h2>
 
-<p>The model is working, but it’s not identifing a person correctly. The reason is data. I have very small data set, and quality of pictures also  affecting the model. You can work with this model and try it. It’s fun!</p>
+<p>The model is working, but it’s not identifying a person correctly. The reason is data. I have very small data set, and quality of pictures also  affecting the model. You can work with this model and try it. It’s fun!</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-</code></pre></div></div>
 <p><img src="/images/face_rec/results/Screen Shot 2020-07-05 at 2.35.48 PM.png" alt="jpeg" />
 <img src="/images/face_rec/results/Screen Shot 2020-07-05 at 2.36.22 PM.png" alt="jpeg" />
 <img src="/images/face_rec/results/Screen Shot 2020-07-05 at 2.47.26 PM.png" alt="jpeg" />
 <img src="/images/face_rec/results/Screen Shot 2020-07-05 at 2.47.47 PM.png" alt="jpeg" /></p>
+
+<p>As you can see, sometimes it’s identifying me, but with my glasses on it’s is saying that I am Kit Harrington (lol).</p>
 :ET
